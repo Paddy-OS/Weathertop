@@ -1,0 +1,97 @@
+
+
+<!-- // Display the stations name -->
+<h1 class="title is-2">{{station.name}}</h1>
+
+
+<!--  Add New  Form -->
+
+
+<div class="box">
+  <h2 class="subtitle is-4">Add New Weather Report</h2>
+
+  <!-- // Form  sends data to the backend https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Your_first_form -->
+  <form action="/station/{{station.id}}/report" method="POST">
+
+    <!-- // Weather  code https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/number -->
+    <div class="field">
+      <label class="label">Weather Code</label>
+      <div class="control">
+        <input class="input" type="number" name="code"  />
+      </div>
+    </div>
+
+    <!-- // Temperature step is the minimum value that can be assigned is 0.1 -->
+    <div class="field">
+      <label class="label">Temperature (°C)</label>
+      <div class="control">
+        <input class="input" type="number" step="0.1" name="temperature" required />
+      </div>
+    </div>
+
+    <!-- // Wind speed  in-->
+    <div class="field">
+      <label class="label">Wind Speed (km/h)</label>
+      <div class="control">
+        <input class="input" type="number" step="0.1" name="windSpeed" required />
+      </div>
+    </div>
+
+    <!-- //  pressure  in hPa -->
+    <div class="field">
+      <label class="label">Pressure (hPa)</label>
+      <div class="control">
+        <input class="input" type="number" name="pressure" required />
+      </div>
+    </div>
+
+    <!-- // Submit button -->
+    <div class="control">
+      <button class="button is-link" type="submit">Add Report</button>
+    </div>
+
+  </form>
+</div>
+
+
+<!--  Display Table of Existing Readings -->
+
+
+<hr />
+<h2 class="subtitle is-4">Reports</h2>
+
+<!-- // Only show table if there are readings https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/thead -->
+{{#if reports.length}}
+
+  <table class="table is-bordered is-striped is-fullwidth">
+    <thead>
+      <tr>
+        <th>Code & Icon</th>
+        <th>Temperature (°C)</th>
+        <th>Wind Speed (km/h)</th>
+        <th>Pressure (hPa)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <!-- // Loop through each reading -->
+       {{#each reports}}
+        <tr>
+          <td>
+            {{this.code}}<br />
+            <!-- //icon for weather codes  -->
+            <img src="/images/{{this.code}}.png" alt="Weather Icon" />
+
+          </td>
+          <td>{{this.temperature}}</td>
+          <td>{{this.windSpeed}}</td>
+          <td>{{this.pressure}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+<!-- // If no readings, show warning -->
+{{else}}
+  <div class="notification is-warning">No reports added yet.</div>
+{{/if}}

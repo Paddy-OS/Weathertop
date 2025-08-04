@@ -1,0 +1,37 @@
+<h1 class="title is-2">WeatherTop Dashboard</h1>
+
+<!--  Add Station Form  -->
+<div class="box mb-5">
+  <h2 class="title is-4">Add New Station</h2>
+
+  <form action="/dashboard/addstation" method="POST">
+    <div class="field">
+      <label class="label">Station Name</label>
+      <div class="control">
+        <input class="input" type="text" name="name"  required />
+      </div>
+    </div>
+
+    <div class="control mt-3">
+      <button class="button is-primary" type="submit">Add Station</button>
+    </div>
+  </form>
+</div>
+
+<!-- Display all stations https://handlebarsjs.com/guide/builtin-helpers.html#if -->
+{{#if stations.length}}
+  <div class="columns is-multiline">
+    {{#each stations}}
+      <div class="column is-one-third">
+        <div class="box">
+          <h2 class="title is-4">{{this.name}}</h2>
+          <a class="button is-link is-small" href="/station/{{this.id}}">
+            View Station
+          </a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <div class="notification is-warning">No stations added yet.</div>
+{{/if}}    
