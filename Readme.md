@@ -23,7 +23,14 @@ This README documents the features  implemented for Release 1.
 - Each station has a dedicated detail page accessible via `/station/:id`.
 - Users can:
   - Submit a new weather report (code, temperature, wind speed, pressure).
-  - the report cannot be viewed as of yet will be able to be viewed in the next releease
+---
+Users can now submit a weather report for each station:
+- Code
+- Temperature (°C)
+- Wind Speed (km/h)
+- Pressure (hPa)
+
+Submitted reports are stored in memory and displayed on the station page.
 
 ---
 
