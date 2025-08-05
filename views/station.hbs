@@ -1,27 +1,22 @@
-
-
-<!-- // Display the stations name -->
+<!--  Display the name of the current weather station -->
 <h1 class="title is-2">{{station.name}}</h1>
 
-
-<!--  Add New  Form -->
-
-
+<!--  Weather Report Submission Form  https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Your_first_form -->
 <div class="box">
   <h2 class="subtitle is-4">Add New Weather Report</h2>
 
-  <!-- // Form  sends data to the backend https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Your_first_form -->
+  <!--  Form submits a POST request to /station   -->
   <form action="/station/{{station.id}}/report" method="POST">
-
-    <!-- // Weather  code https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/number -->
+    
+    <!--  Weather Code Input  -->
     <div class="field">
       <label class="label">Weather Code</label>
       <div class="control">
-        <input class="input" type="number" name="code"  />
+        <input class="input" type="number" name="code" required />
       </div>
     </div>
 
-    <!-- // Temperature step is the minimum value that can be assigned is 0.1 -->
+    <!--  Temperature  -->
     <div class="field">
       <label class="label">Temperature (°C)</label>
       <div class="control">
@@ -29,7 +24,7 @@
       </div>
     </div>
 
-    <!-- // Wind speed  in-->
+    <!-- Wind Speed   -->
     <div class="field">
       <label class="label">Wind Speed (km/h)</label>
       <div class="control">
@@ -37,7 +32,7 @@
       </div>
     </div>
 
-    <!-- //  pressure  in hPa -->
+    <!--  Pressure -->
     <div class="field">
       <label class="label">Pressure (hPa)</label>
       <div class="control">
@@ -45,43 +40,38 @@
       </div>
     </div>
 
-    <!-- // Submit button -->
-    <div class="control">
+    <!--  Submit button to add the weather report -->
+    <div class="control mt-3">
       <button class="button is-link" type="submit">Add Report</button>
     </div>
-
   </form>
 </div>
 
-
-<!--  Display Table of Existing Readings -->
-
-
+<!--  Divider between form and report list -->
 <hr />
 <h2 class="subtitle is-4">Reports</h2>
 
-<!-- // Only show table if there are readings https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/thead -->
+<!--  Check if there are any reports for this station  https://handlebarsjs.com/guide/builtin-helpers.html#if-->
 {{#if reports.length}}
 
+  <!--  Display a table of all reports -->
   <table class="table is-bordered is-striped is-fullwidth">
     <thead>
       <tr>
-        <th>Code & Icon</th>
-        <th>Temperature (°C)</th>
-        <th>Wind Speed (km/h)</th>
-        <th>Pressure (hPa)</th>
+        <th>Temperature (°C)</th>     <!-- Temperature reading -->
+        <th>Wind Speed (km/h)</th>    <!-- Wind speed reading -->
+        <th>Pressure (hPa)</th>       <!-- Pressure reading -->
       </tr>
     </thead>
 
     <tbody>
-      <!-- // Loop through each reading -->
-       {{#each reports}}
+      <!--  Loop through each report in the reports array https://handlebarsjs.com/guide/builtin-helpers.html#each-->
+      {{#each reports}}
         <tr>
           <td>
             {{this.code}}<br />
-            <!-- //icon for weather codes  -->
+            <!--  Load a weather icon based on the report code -->
             <img src="/images/{{this.code}}.png" alt="Weather Icon" />
-
           </td>
           <td>{{this.temperature}}</td>
           <td>{{this.windSpeed}}</td>
@@ -91,7 +81,7 @@
     </tbody>
   </table>
 
-<!-- // If no readings, show warning -->
+<!--  If no reports exist, show a warning message -->
 {{else}}
   <div class="notification is-warning">No reports added yet.</div>
 {{/if}}

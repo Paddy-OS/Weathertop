@@ -1,24 +1,27 @@
-//  Imports the station data store 
+//  Import station and report data stores
 import stationStore from "../models/station-store.js";
+import reportStore from "../models/report-store.js";  //  Store for weather reports
 
-// Export s controller object 
+//  Export the station controller object
 export const stationController = {
 
-
-  
-  // Show a single station’s detail page and its readings
-  
+  //  GET stationid
+  //  Show a single station's detail page and all its reports
   showStation(request, response) {
-    const stationId = request.params.id; //  Get station ID from the URL https://expressjs.com/en/guide/routing.html#route-parameters, https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs/Introduction#sending_responses
+    const stationId = request.params.id;  //  Extract station ID from the URL
 
-    const station = stationStore.getStationById(stationId); //  Find matching station by ID
+    const station = stationStore.getStationById(stationId); //  Finds the station by ID
+    const reports = reportStore.getReportsByStationId(stationId); //  Get all reports for this station
 
+    //  changes data to Handlebars view
     const viewData = {
       title: `${station.name} Details`,
-      station: station, //  Includes readings array
+      station: station,
+      reports: reports
     };
 
-    response.render("station", viewData); //  Renders views/station.hbs with the data
+    //  Render the station https://expressjs.com/en/guide/using-template-engines.html
+    response.render("station", viewData);
   }
 
 };

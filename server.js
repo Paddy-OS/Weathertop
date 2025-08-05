@@ -2,6 +2,8 @@ import express from "express";                            // https://expressjs.c
 import { engine } from "express-handlebars";              // Template engine: https://www.npmjs.com/package/express-handlebars
 import { stationController } from "./controllers/station-controller.js";     // Controller for station views
 import { dashboardController } from "./controllers/dashboard-controller.js"; // Controller for dashboard
+import { reportController } from "./controllers/report-controller.js";
+
 
 
 const app = express();                                     // Create Express app
@@ -19,6 +21,11 @@ app.set("views", "./views");                               // Folder for view te
 
 //  View single station page https://expressjs.com/en/guide/routing.html
 app.get("/station/:id", stationController.showStation);
+
+
+//  POST route to add a report to a station
+app.post("/station/:id/report", reportController.addReport);
+
 
 //  Dashboard page with all stations
 app.get("/dashboard", dashboardController.index);
