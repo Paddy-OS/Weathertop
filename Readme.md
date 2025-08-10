@@ -33,4 +33,15 @@ Users can now submit a weather report for each station:
 - Pressure (hPa)
 
 Submitted reports are stored in memory and displayed on the station page.
+ 
+ Features Implemented (Release 2)
 
+ 
+ 1. Image mapping
+- Users can can enter what direction the wind is blowing.
+- Each station gets an image based of the weather code , just needs images to be loaded into images folder.
+
+
+ 2. Latitude & Longitude
+- can be entered while entering a station.
+- Each card shows the station name and includes a button to view its detail page.

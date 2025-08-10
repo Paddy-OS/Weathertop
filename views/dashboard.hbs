@@ -12,26 +12,62 @@
       </div>
     </div>
 
+     <!--  Latitude -->
+    <div class="field">
+      <label class="label">Latitude</label>
+      <div class="control">
+        <input class="input" type="number"  name="lat"  required>
+      </div>
+      
+    </div>
+
+    <!-- Longitude -->
+    <div class="field">
+      <label class="label">Longitude</label>
+      <div class="control">
+        <input class="input" type="number"  name="lng"  required>
+      </div>
+      
+    </div>
+
     <div class="control mt-3">
       <button class="button is-primary" type="submit">Add Station</button>
     </div>
   </form>
 </div>
 
-<!-- Display all stations https://handlebarsjs.com/guide/builtin-helpers.html#if -->
+<!-- Stations List -->
+<h2 class="subtitle is-4">My Stations</h2>
+
 {{#if stations.length}}
-  <div class="columns is-multiline">
-    {{#each stations}}
-      <div class="column is-one-third">
-        <div class="box">
-          <h2 class="title is-4">{{this.name}}</h2>
-          <a class="button is-link is-small" href="/station/{{this.id}}">
-            View Station
-          </a>
-        </div>
-      </div>
-    {{/each}}
-  </div>
+  <!--  Table shows station name  coordinates -->
+  <table class="table is-fullwidth is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Coordinates</th>       
+        <th>Open</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each stations}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>
+            <!--  Show lat/lng only if present -->
+            {{#if this.lat}}
+              {{this.lat}}, {{this.lng}}
+            {{else}}
+              <span class="has-text-grey">No coordinates</span>
+            {{/if}}
+          </td>
+          <td>
+            <a class="button is-small is-link" href="/station/{{this.id}}">View</a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
 {{else}}
-  <div class="notification is-warning">No stations added yet.</div>
-{{/if}}    
+  <div class="notification is-warning">No stations yet. Add one above.</div>
+{{/if}}

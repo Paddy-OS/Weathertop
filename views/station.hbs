@@ -1,6 +1,14 @@
 <!--  Display the name of the current weather station -->
 <h1 class="title is-2">{{station.name}}</h1>
 
+<!--  shows the action URL so you can verify the id is present -->
+<p class="is-size-7 has-text-grey">POST target: /station/{{station.id}}/report</p>
+
+<!-- Coordinates https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional?  -->
+{{#if station.lat}}
+  <p class="mb-4 has-text-grey">Location: {{station.lat}}, {{station.lng}}</p>
+{{/if}}
+
 <!--  Weather Report Submission Form  https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Your_first_form -->
 <div class="box">
   <h2 class="subtitle is-4">Add New Weather Report</h2>
@@ -32,6 +40,34 @@
       </div>
     </div>
 
+     <!--  Wind Direction  for compass helper -->
+    <div class="field">
+      <label class="label">Wind Direction</label>
+      <div class="control">
+        <div class="select is-fullwidth">
+          <select name="windDirection" required>
+            <option value="0">N</option>
+            <option value="22">NNE</option>
+            <option value="45">NE</option>
+            <option value="67">ENE</option>
+            <option value="90">E</option>
+            <option value="112">ESE</option>
+            <option value="135">SE</option>
+            <option value="157">SSE</option>
+            <option value="180">S</option>
+            <option value="202">SSW</option>
+            <option value="225">SW</option>
+            <option value="247">WSW</option>
+            <option value="270">W</option>
+            <option value="292">WNW</option>
+            <option value="315">NW</option>
+            <option value="337">NNW</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+
     <!--  Pressure -->
     <div class="field">
       <label class="label">Pressure (hPa)</label>
@@ -51,6 +87,18 @@
 <hr />
 <h2 class="subtitle is-4">Reports</h2>
 
+<!--  Summary box using helpers https://stackoverflow.com/questions/38661295/node-express-handlebars-where-to-define-custom-helpers? -->
+{{#if reports.length}}
+  <div class="box">
+    <h3 class="subtitle is-5">Summary</h3>
+    <ul>
+      <li>Temperature: {{min reports "temperature"}}°C → {{max reports "temperature"}}°C</li>
+      <li>Wind: {{min reports "windSpeed"}} km/h → {{max reports "windSpeed"}} km/h</li>
+      <li>Pressure: {{min reports "pressure"}} hPa → {{max reports "pressure"}} hPa</li>
+    </ul>
+  </div>
+{{/if}}
+
 <!--  Check if there are any reports for this station  https://handlebarsjs.com/guide/builtin-helpers.html#if-->
 {{#if reports.length}}
 
@@ -59,8 +107,9 @@
     <thead>
       <tr>
         <th>Temperature (°C)</th>     <!-- Temperature reading -->
-        <th>Wind Speed (km/h)</th>    <!-- Wind speed reading -->
+        <th>Wind Speed (km/h / compass)</th>    <!-- Wind speed reading -->
         <th>Pressure (hPa)</th>       <!-- Pressure reading -->
+        <th> Condition</th> <!-- icon/ code -->
       </tr>
     </thead>
 
@@ -68,14 +117,15 @@
       <!--  Loop through each report in the reports array https://handlebarsjs.com/guide/builtin-helpers.html#each-->
       {{#each reports}}
         <tr>
+          
+         <td>{{temperature}}</td>
+          <td>{{windSpeed}} km/h ({{compass windDirection}})</td>
+          <td>{{pressure}}</td>
           <td>
             {{this.code}}<br />
-            <!--  Load a weather icon based on the report code -->
-            <img src="/images/{{this.code}}.png" alt="Weather Icon" />
+            <!--  Load a weather icon using my helper -->
+            {{> weatherIcon }}
           </td>
-          <td>{{this.temperature}}</td>
-          <td>{{this.windSpeed}}</td>
-          <td>{{this.pressure}}</td>
         </tr>
       {{/each}}
     </tbody>
