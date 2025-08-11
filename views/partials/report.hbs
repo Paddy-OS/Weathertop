@@ -1,0 +1,29 @@
+{{!-- views/partials/report.hbs --}}
+<div class="box"> {{!-- Outer box for each weather report --}}
+  
+  {{!-- Temperature --}}
+  <p>
+    <img src="/images/temp.png" alt="Temperature" style="height:24px;">  {{!-- Temp icon --}}
+    <strong>Temperature:</strong> {{report.temperature}}°C {{!-- Show temperature value --}}
+  </p>
+
+  {{!-- Wind speed and direction --}}
+  <p>
+    <img src="/images/wind.png" alt="Wind" style="height:24px;">  {{!-- Wind icon --}}
+    <strong>Wind:</strong> {{report.windSpeed}} km/h 
+    ({{compass report.windDirection}}) {{!-- Convert wind direction number to compass text --}}
+  </p>
+
+  {{!-- Pressure --}}
+  <p>
+    <img src="/images/pressure.png" alt="Pressure" style="height:24px;"> {{!-- Pressure icon --}}
+    <strong>Pressure:</strong> {{report.pressure}} hPa {{!-- Show air pressure --}}
+  </p>
+
+  {{!-- Weather code and icon --}}
+  <p>
+    <img src="{{iconFor report.code}}" alt="Weather Icon" style="height:24px;"> {{!-- Show weather icon for code --}}
+    <span>Code: {{report.code}}</span> {{!-- Show weather code number --}}
+  </p>
+
+</div>

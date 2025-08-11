@@ -11,23 +11,27 @@ export const stationController = {
     const stationId = request.params.id;  //  Extract station ID from the URL
 
     const station = stationStore.getStationById(stationId); //  Finds the station by ID
+    
 
-      if (!station) {
+       if (!station) {
       // to help debugging https://stackoverflow.com/questions/36837531/how-to-throw-a-404-error-in-express-js?
       return response.status(404).send("Station not found"); 
     }
 
-    const reports = reportStore.getReportsByStationId(stationId); //  Get all reports for this station
+    const reports = reportStore.getReportsByStationId(stationId); // Gets report for relevant station 
 
-    //  changes data to Handlebars view
-    const viewData = {
+    // Get latest report (if exists)
+  let latest = null;
+  if (reports.length > 0) {
+    latest = reports[reports.length - 1];
+  }
+//  Render the station
+    response.render("station", {
       title: `${station.name} Details`,
       station: station,
-      reports: reports
-    };
-
-    //  Render the station https://expressjs.com/en/guide/using-template-engines.html
-    response.render("station", viewData);
+      reports: reports,
+      latest: latest
+    });
   },
 
   // Add a new report to a station 
