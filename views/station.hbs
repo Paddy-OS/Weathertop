@@ -86,32 +86,38 @@
 <hr />
 <h2 class="subtitle is-4">Reports</h2>
 
-<!-- Display the Most Recent Report in a Summary Card -->
-{{#if reports.length}} <!-- check to se if any values in reports -->
-  <div class="box"> <!-- bulma box styling -->
-    <h3 class="subtitle is-5">Most Recent Report</h3>
+{{#if reports.length}}
+  <div class="box">
+    <h3 class="subtitle is-5">Average Weather Data</h3>
     <div class="columns">
+      
+      <!-- Avg Temperature -->
       <div class="column">
-        <!-- Temperature Box with Image -->
         <div class="box">
-          <p><strong>Temperature:</strong> {{reports.[0].temperature}}°C</p> <!-- access first report in array and shows temp value -->
-          <img src="/images/temp.png" alt="Temperature Icon" class="image is-48x48"><!-- Display temp icon -->
+          <p><strong>Temperature:</strong> {{averages.temperature}}°C</p>
+          <img src="/images/temp.png" alt="Temperature Icon" class="image is-48x48">
         </div>
       </div>
+
+      <!-- Avg Wind Speed -->
       <div class="column">
-        <!-- Wind Speed Box with Image -->
         <div class="box">
-          <p><strong>Wind Speed:</strong> {{reports.[0].windSpeed}} km/h ({{compass reports.[0].windDirection}})</p> <!-- access first report in array and shows wind value -->
-         <img src="/images/wind.png" alt="Wind Icon" class="image is-48x48"> <!-- Display wind icon -->
+          <p>
+            <strong>Wind Speed:</strong> {{averages.windSpeed}} km/h
+            ({{compass averages.windDir}})
+          </p>
+          <img src="/images/wind.png" alt="Wind Icon" class="image is-48x48">
         </div>
       </div>
+
+      <!-- Avg Pressure -->
       <div class="column">
-        <!-- Pressure Box with Image -->
         <div class="box">
-          <p><strong>Pressure:</strong> {{reports.[0].pressure}} hPa</p>
-         <img src="/images/pressure.png" alt="Pressure Icon" class="image is-48x48"> <!-- Display pressure icon -->
+          <p><strong>Pressure:</strong> {{averages.pressure}} hPa</p>
+          <img src="/images/pressure.png" alt="Pressure Icon" class="image is-48x48">
         </div>
       </div>
+
     </div>
   </div>
 {{else}}

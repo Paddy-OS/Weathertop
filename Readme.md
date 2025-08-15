@@ -45,3 +45,10 @@ Submitted reports are stored in memory and displayed on the station page.
  2. Latitude & Longitude
 - can be entered while entering a station.
 - Each card shows the station name and includes a button to view its detail page.
+
+3. Averages
+- Average temp,wind and pressure now appear
+
+4. Accounts Controller
+- User can now sign up and login.
+- Had to create a guest user so those who havent signed up can still use the pages features.

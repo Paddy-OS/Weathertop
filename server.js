@@ -1,24 +1,60 @@
 import express from "express";                            // https://expressjs.com/en/starter/hello-world.html
-import path from "path";   
+import session from "express-session";
 import { engine } from "express-handlebars";              // Template engine: https://www.npmjs.com/package/express-handlebars
 import { stationController } from "./controllers/station-controller.js";     // Controller for station views
 import { dashboardController } from "./controllers/dashboard-controller.js"; // Controller for dashboard
 import { reportController } from "./controllers/report-controller.js";
-
+import { accountsController } from "./controllers/accounts-controller.js"; 
 
 
 const app = express();                                     // Create Express app
 const port = 3000;                                         // Port to listen on
 
 // Middleware
+
+app.use((req, res, next) => { // https://stackoverflow.com/questions/25538962/how-to-write-a-middleware-to-log-the-url-or-the-body-parameters
+  console.log("REQ:", req.method, req.url); // accepts incoming requests and logs all
+  next();
+});
+
+
+
 app.use(express.urlencoded({ extended: true }));           // To parse form data
 app.use(express.static("public"));                         // To serve static files like CSS/images
 
+app.use(session({                                     //  basic session
+  secret: "change-this",                              // used to sign cookie ID
+  resave: false,                                        // if session was not saved do not save
+  saveUninitialized: false
+}));
+
+app.use((req, res, next) => {
+  const uid = req.session.userId || null;   // guest or a real user id or null
+  res.locals.currentUserId = uid;
+  res.locals.isLoggedIn = !!uid && uid !== "guest";
+  next();
+});
+
+// Make userId available to all views  https://stackoverflow.com/questions/15622618/where-should-i-store-current-user-in-node-js? , https://stackoverflow.com/questions/47766181/how-can-i-access-session-data-in-an-ejs-template-with-a-node-js-backend?utm
+ app.use((req, res, next) => {
+  // If not logged in, treat as aguest user
+  if (!req.session.userId) {
+    req.session.userId = "guest";
+  }
+  // Make it available to all views 
+  res.locals.currentUserId = req.session.userId;
+  next();
+}); // if not logged in still viewable https://www.onemorecommit.com/2016/01/28/making-data-available-to-all-express-views/?
+  
+
 const IMAGES = { // image mapping for weather codes
-  "100": "sunny.png",
-  "200": "cloudy.png",
-  "300": "rainy.png",
-  "400": "snow.png"
+  "800": "800.png", // clear sky
+  "801": "801.png", // few clouds
+  "600": "600.png", // light snow
+  "502": "502.png", // heavy rain
+  "500": "500.png", // light rain
+  "202" : "202.png" // thunderstporm
+
 };
 
 const hbsHelpers = {
@@ -41,7 +77,7 @@ const hbsHelpers = {
   },
 
   // Find the minimum value for a property
-  min: function(arr, prop) {
+  min(arr, prop) {
     if (!arr || arr.length === 0) return "";// check if array is false or empty
     let minValue = arr[0][prop]; // start with first value
     for (let i = 1; i < arr.length; i++) { // starts at index 1 
@@ -53,7 +89,7 @@ const hbsHelpers = {
   },
 
   // Find the maximum value for a property
-  max: function(arr, prop) {
+  max(arr, prop) {
     if (!arr || arr.length === 0) return ""; // checks if array is empty or false
     let maxValue = arr[0][prop]; // start with first value
     for (let i = 1; i < arr.length; i++) { 
@@ -76,9 +112,25 @@ const hbsHelpers = {
 
 
 // Set up Handlebars as the view engine
-app.engine("hbs", engine({ extname: ".hbs", helpers: hbsHelpers }));            // Use .hbs extension https://stackoverflow.com/questions/43974542/helpers-in-express-handlebars?utm
+app.engine("hbs", engine({
+  extname: ".hbs",
+  helpers: hbsHelpers,
+  layoutsDir: "./views/layouts",
+  defaultLayout: "main",
+  partialsDir: "./views/partials"
+}));        // Use .hbs extension https://stackoverflow.com/questions/43974542/helpers-in-express-handlebars?utm
+
+
 app.set("view engine", "hbs");
 app.set("views", "./views");                               // Folder for view templates
+
+app.get("/signup", accountsController.showSignup);     // express routes that connect URLS to account controllers    
+app.post("/signup", accountsController.signup);            
+app.get("/login", accountsController.showLogin);           
+app.post("/login", accountsController.login);              
+app.post("/logout", accountsController.logout);
+app.get("/logout", accountsController.logout);
+
 
 
 //  View single station page https://expressjs.com/en/guide/routing.html

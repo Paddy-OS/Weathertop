@@ -2,14 +2,27 @@
 import stationStore from "../models/station-store.js";
 import reportStore from "../models/report-store.js";  //  Store for weather reports
 
+function calcAvg(arr, prop) {
+  if (!Array.isArray(arr) || arr.length === 0) return null;
+  let sum = 0, count = 0;
+  for (const r of arr) {
+    const val = Number(r?.[prop]);
+    if (Number.isFinite(val)) {
+      sum += val;
+      count++;
+    }
+  }
+  return count ? Number((sum / count).toFixed(1)) : null;
+}
+
 //  Export the station controller object
 export const stationController = {
 
   //  GET stationid
   //  Show a single station's detail page and all its reports
   showStation(request, response) {
-    const stationId = request.params.id;  //  Extract station ID from the URL
 
+    const stationId = request.params.id;  //  Extract station ID from the URL
     const station = stationStore.getStationById(stationId); //  Finds the station by ID
     
 
@@ -25,12 +38,21 @@ export const stationController = {
   if (reports.length > 0) {
     latest = reports[reports.length - 1];
   }
+
+  const averages = { // CREATES NEW OBJECT FOR AVERAGES
+      temperature: calcAvg(reports, "temperature"),// CALLS CALAVG  TO LOOP THROUGH REPORTS AND GET AVERAGES FROM ALL REPORTS
+      windSpeed:   calcAvg(reports, "windSpeed"),
+      pressure:    calcAvg(reports, "pressure"),
+      
+    };
+
 //  Render the station
     response.render("station", {
       title: `${station.name} Details`,
       station: station,
       reports: reports,
-      latest: latest
+      latest: latest,
+      averages:averages
     });
   },
 

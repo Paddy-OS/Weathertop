@@ -9,9 +9,13 @@ export const dashboardController = {
  
   index(req, res) {
     const stations = stationStore.getAllStations(); //  Gets all stations  https://expressjs.com/en/api.html#res.render
+
+     const userId = req.session.userId;                  //  users logg in
+    const myStations = stations.filter(s => s.userId === userId); //  only users stations
+
     res.render("dashboard", {
       title: "WeatherTop Dashboard",
-      stations,
+      stations:myStations,
     });
   },
 
@@ -24,7 +28,10 @@ export const dashboardController = {
     const newStation = {
       id: uuid(),                     //  Unique station ID
       name: req.body.name,           //  Name  form
-      readings: []                   //  starts with empty readings
+      readings: [],                 //  starts with empty readings
+      lat: req.body.lat,
+      lng: req.body.lng,
+      userId: req.session.userId 
     };
 
     stationStore.addStation(newStation); //  Add station to memory
