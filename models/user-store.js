@@ -16,7 +16,31 @@ const userStore = { //y to hold users data
 
   getById(id) { // finds user with id
     return this.users.find(u => u.id === id);
+  }, 
+
+  // Update details
+ update(id, changes) {
+  if (!this.users) this.users = [];
+
+  var i = 0;// starts at first index
+  while (i < this.users.length) {// loop for array
+    var u = this.users[i];// user at index i
+
+    if (u && u.id === id) { // check ids match
+      if (changes) { // only update if there is something to update https://stackoverflow.com/questions/65316870/how-to-use-patch-with-node-js-and-express
+        // if the key exists in patch update it https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in
+        if ('name'     in changes) u.name = changes.name;// update name/ email/ password https://stackoverflow.com/questions/13632999/ifkey-in-object-or-ifobject-hasownpropertykey
+        if ('email'    in changes) u.email = changes.email;
+        if ('password' in changes) u.password = changes.password;
+      }
+      return true; // update done
+    }
+
+    i = i + 1; // next user
   }
+
+  return false; // not found
+}
 };
 
 export default userStore;

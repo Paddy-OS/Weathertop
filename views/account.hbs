@@ -1,0 +1,20 @@
+<h1 class="title is-3">Your Profile</h1>
+
+<form method="POST" class="box" style="max-width: 560px">
+  <div class="field">
+    <label class="label">Name</label>
+    <input class="input" name="name" value="{{user.name}}"><!-- input to update users name -->
+  </div>
+
+  <div class="field">
+    <label class="label">Email</label>
+    <input class="input" type="email" name="email" value="{{user.email}}"> <!-- input to update users email -->
+  </div>
+
+  <div class="field">
+    <label class="label">Password </label>
+    <input class="input" type="password" name="password"> <!-- input to update password -->
+  </div>
+
+  <button class="button is-link">Save changes</button>
+</form>

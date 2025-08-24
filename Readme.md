@@ -52,3 +52,18 @@ Submitted reports are stored in memory and displayed on the station page.
 4. Accounts Controller
 - User can now sign up and login.
 - Had to create a guest user so those who havent signed up can still use the pages features.
+
+ Features Implemented (Release 3)
+
+ 1. Update Details
+ - Users can now update their details.
+ - Such as Name, email and passowrd.
+
+ 2. Alphabetical stations
+ - Stations are now listed in alphabetical order.
+ 
+ 3. Time and date 
+ - time and date now appears beside a report when it is entered 
+
+ 4. Delete features 
+ - Reports and stations can now both be deleted.

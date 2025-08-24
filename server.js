@@ -3,8 +3,8 @@ import session from "express-session";
 import { engine } from "express-handlebars";              // Template engine: https://www.npmjs.com/package/express-handlebars
 import { stationController } from "./controllers/station-controller.js";     // Controller for station views
 import { dashboardController } from "./controllers/dashboard-controller.js"; // Controller for dashboard
-import { reportController } from "./controllers/report-controller.js";
-import { accountsController } from "./controllers/accounts-controller.js"; 
+import { reportController } from "./controllers/report-controller.js"; // controller for report
+import { accountsController } from "./controllers/accounts-controller.js"; // Controller for accounts
 
 
 const app = express();                                     // Create Express app
@@ -16,6 +16,7 @@ app.use((req, res, next) => { // https://stackoverflow.com/questions/25538962/ho
   console.log("REQ:", req.method, req.url); // accepts incoming requests and logs all
   next();
 });
+
 
 
 
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
   res.locals.isLoggedIn = !!uid && uid !== "guest";
   next();
 });
+
 
 // Make userId available to all views  https://stackoverflow.com/questions/15622618/where-should-i-store-current-user-in-node-js? , https://stackoverflow.com/questions/47766181/how-can-i-access-session-data-in-an-ejs-template-with-a-node-js-backend?utm
  app.use((req, res, next) => {
@@ -58,6 +60,19 @@ const IMAGES = { // image mapping for weather codes
 };
 
 const hbsHelpers = {
+
+  trendIcon: function(t) {            // map trend 
+  if (t === "up")   return "↑";     // up arrow
+  if (t === "down") return "↓";     // down arrow
+  return "→";                       // steady (or unknown)
+},
+
+// Helper to add users local time and date to report
+formatDate: (iso) => {                       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString?
+  if (!iso) return "";                       // if missing/empty, show nothing
+  const d = new Date(iso);                   //  convert string into iso date 
+  return d.toLocaleString();                 // Convert to the user's local date & time string
+},
   // Change wind direction  into a compass direction - https://codepal.ai/code-generator/query/2GmJpNwg/javascript-compass-direction?utm
   compass: function(deg) {
     // If deg is not a number, return an empty string
@@ -124,12 +139,21 @@ app.engine("hbs", engine({
 app.set("view engine", "hbs");
 app.set("views", "./views");                               // Folder for view templates
 
+//Accounts controllers routes
 app.get("/signup", accountsController.showSignup);     // express routes that connect URLS to account controllers    
 app.post("/signup", accountsController.signup);            
 app.get("/login", accountsController.showLogin);           
 app.post("/login", accountsController.login);              
 app.post("/logout", accountsController.logout);
 app.get("/logout", accountsController.logout);
+
+// Delete station routes
+app.post("/station/:stationId/report/:reportId/delete", reportController.deleteReport);// Delete a report
+app.post("/station/:id/delete", stationController.deleteStation);// delete a station
+
+// Member details
+app.get("/account",  accountsController.showAccount);
+app.post("/account", accountsController.updateAccount);
 
 
 

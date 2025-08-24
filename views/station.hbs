@@ -95,6 +95,7 @@
       <div class="column">
         <div class="box">
           <p><strong>Temperature:</strong> {{averages.temperature}}°C</p>
+           {{trendIcon trends.temperature}}     {{!--Arrowsd for tends if the go up , down or same ↑ / ↓ / → --}}
           <img src="/images/temp.png" alt="Temperature Icon" class="image is-48x48">
         </div>
       </div>
@@ -104,6 +105,7 @@
         <div class="box">
           <p>
             <strong>Wind Speed:</strong> {{averages.windSpeed}} km/h
+             {{trendIcon trends.windSpeed}}   
             ({{compass averages.windDir}})
           </p>
           <img src="/images/wind.png" alt="Wind Icon" class="image is-48x48">
@@ -114,6 +116,7 @@
       <div class="column">
         <div class="box">
           <p><strong>Pressure:</strong> {{averages.pressure}} hPa</p>
+           {{trendIcon trends.pressure}}     
           <img src="/images/pressure.png" alt="Pressure Icon" class="image is-48x48">
         </div>
       </div>
@@ -128,6 +131,7 @@
   <table class="table is-bordered is-striped is-fullwidth">
     <thead>
       <tr>
+        <th>Date / Time</th> <!-- date and time -->
         <th>Temperature (°C)</th>     <!-- Temperature reading -->
         <th>Wind Speed (km/h / compass)</th>    <!-- Wind speed reading -->
         <th>Pressure (hPa)</th>       <!-- Pressure reading -->
@@ -140,13 +144,22 @@
       {{#each reports}}
         <tr>
           
-         <td>{{temperature}}</td>
+          <td>{{formatDate createdAt}}</td> <!-- date and time -->
+          <td>{{temperature}}</td>
           <td>{{windSpeed}} km/h ({{compass windDirection}})</td>
           <td>{{pressure}}</td>
           <td>
             {{this.code}}<br />
             <!--  Load a weather icon using my helper -->
             {{> weatherIcon }}
+
+           
+  <!-- Delete THIS report -->
+<form method="post" action="/station/{{../station.id}}/report/{{this.id}}/delete" style="display:inline">
+  <button type="submit" class="button is-small is-danger is-light mt-2">
+    Delete
+  </button>
+</form>
           </td>
         </tr>
       {{/each}}

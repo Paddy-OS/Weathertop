@@ -39,6 +39,91 @@ export const accountsController = {
     res.redirect("/dashboard");
   },
 
+  // Show the profile edit page
+showAccount(req, res) {
+  const userId = req.session.userId;        // who is logged in
+
+  // block guests / not logged in
+  if (!userId || userId === "guest") {
+    res.redirect("/login");
+    return;
+  }
+
+  const user = userStore.getById(userId);   // fetch user record
+  if (!user) {
+    res.redirect("/login");
+    return;
+  }
+
+  // render the view with the user data
+  res.render("account", { user: user });
+},
+
+// Handle profile form submit
+updateAccount(req, res) {
+  const userId = req.session.userId;
+
+  // block guests / not logged in
+  if (!userId || userId === "guest") {
+    res.redirect("/login");
+    return;
+  }
+
+  const user = userStore.getById(userId);
+  if (!user) {
+    res.redirect("/login");
+    return;
+  }
+
+  // read fields from the form
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // build a simple patch with only non-empty values
+  const patch = {};
+  if (name && name.trim() !== "")   patch.name = String(name);
+  if (email && email.trim() !== "") patch.email = String(email);
+  if (password && password !== "")  patch.password = String(password);
+
+  // apply changes and go back to the profile page
+  userStore.update(userId, patch);
+  res.redirect("/account");
+},
+
+showAccount(req, res) {
+  const userId = req.session.userId;
+  if (!userId || userId === "guest") {  // not logged in
+    res.redirect("/login");
+    return;
+  }
+  const user = userStore.getById(userId);
+  if (!user) {                          // just in case
+    res.redirect("/login");
+    return;
+  }
+  res.render("account", { user: user });
+},
+
+updateAccount(req, res) {
+  const userId = req.session.userId;
+  if (!userId || userId === "guest") {
+    res.redirect("/login");
+    return;
+  }
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const patch = {};
+  if (name && name.trim() !== "")   patch.name = String(name);
+  if (email && email.trim() !== "") patch.email = String(email);
+  if (password && password !== "")  patch.password = String(password);
+
+  userStore.update(userId, patch);
+  res.redirect("/account");
+},
+
 
   login(req, res) {
     // Read submitted email/password
@@ -71,7 +156,7 @@ export const accountsController = {
       console.error("Logout error:", err);
       return res.status(500).send("Logout failed");
     }
-    // clear the default express-session cookie
+    // clear the default  cookie
     res.clearCookie("connect.sid");
     return res.redirect("/login");
   });

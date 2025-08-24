@@ -10,14 +10,16 @@
       <div class="buttons">
         
         <a class="button is-light is-size-5" href="/dashboard">Dashboard</a> <!-- links to dashboard -->
-        <a class="button is-light is-size-5" href="">About</a>
+        
 
 
  {{#if isLoggedIn}}
           <!-- real logged-in user -->
+          <a class="button is-light is-size-5" href="/account">Account</a>
           <form method="POST" action="/logout" style="display:inline;">
             <button class="button is-light is-size-5">Logout</button>
           </form>
+          
         {{else}}
           <!-- guest or not logged in -->
           <a class="button is-light is-size-5" href="/login">Login</a>

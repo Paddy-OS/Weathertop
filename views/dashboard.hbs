@@ -47,6 +47,7 @@
         <th>Name</th>
         <th>Coordinates</th>       
         <th>Open</th>
+         <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -64,6 +65,13 @@
           <td>
             <a class="button is-small is-link" href="/station/{{this.id}}">View</a>
           </td>
+              <!--  Delete Station button -->
+          <td>  
+            <form method="POST" action="/station/{{this.id}}/delete" style="display:inline">  
+              <button class="button is-small is-danger is-light"                                      
+                      onclick="return confirm('Delete this station?')">Delete Station</button>         
+            </form>                                                                                    
+          </td> 
         </tr>
       {{/each}}
     </tbody>

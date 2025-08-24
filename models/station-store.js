@@ -60,6 +60,17 @@ addStation(data) {
     userId: data.userId || null,
     readings: []
   });
+},
+
+// Remove one station by station id
+remove (id) {
+  for (var i = 0; i < this.stations.length; i++) {
+    var station = this.stations[i];
+    if (station.id === id) {
+      this.stations.splice(i, 1); // delete the item at index i
+      return;                     // done after removing one
+    }
+  }
 }
 
 };

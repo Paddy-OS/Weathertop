@@ -30,10 +30,21 @@ export const reportController = {
       pressure,
       windDirection
     );
+
+    
     
     console.log("Report added for station:", stationId);
 
     // Redirect back to the station page
     response.redirect("/station/" + stationId);
+  },
+
+   deleteReport (request, response) {
+    // gets ids from the URL
+    var stationId = request.params.stationId;
+    var reportId  = request.params.reportId;
+
+    // Go back to the same station page
+    return response.redirect("/station/" + stationId);
   }
 };
