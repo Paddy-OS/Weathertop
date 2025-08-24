@@ -8,7 +8,7 @@ import { accountsController } from "./controllers/accounts-controller.js"; // Co
 
 
 const app = express();                                     // Create Express app
-const port = 3000;                                         // Port to listen on
+const port = process.env.PORT || 3000;                                          // Port for hosting
 
 // Middleware
 
@@ -24,9 +24,9 @@ app.use(express.urlencoded({ extended: true }));           // To parse form data
 app.use(express.static("public"));                         // To serve static files like CSS/images
 
 app.use(session({                                     //  basic session
-  secret: "change-this",                              // used to sign cookie ID
-  resave: false,                                        // if session was not saved do not save
-  saveUninitialized: false
+  secret: process.env.SESSION_SECRET || "dev-secret",
+    resave: false,
+    saveUninitialized: false,
 }));
 
 app.use((req, res, next) => {
